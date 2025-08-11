@@ -3,6 +3,7 @@ package com.MohammadMarediya.FinFlow.service.impl;
 import com.MohammadMarediya.FinFlow.dto.MonthLyAvailableBalance.MonthlyAvailableBalanceResponseDTO;
 import com.MohammadMarediya.FinFlow.entity.MonthlyAvailableBalance;
 import com.MohammadMarediya.FinFlow.entity.User;
+import com.MohammadMarediya.FinFlow.exception.ResourceNotFoundException;
 import com.MohammadMarediya.FinFlow.repository.MonthlyAvailableBalanceRepository;
 import com.MohammadMarediya.FinFlow.repository.UserRepository;
 import com.MohammadMarediya.FinFlow.service.interfaces.MonthlyAvailableBalanceService;
@@ -87,6 +88,10 @@ public class MonthlyAvailableBalanceServiceImpl implements MonthlyAvailableBalan
             throw new IllegalArgumentException("Month cannot be null or empty");
         }
         MonthlyAvailableBalance balance = repository.findByMonthAndYearAndUserId(month, year, userId);
+        if (balance == null) {
+            log.warn("No monthly available balance found for month: {}, year: {}, user ID: {}", month, year, userId);
+            throw new ResourceNotFoundException("No monthly available balance found for the specified month and year");
+        }
         MonthlyAvailableBalanceResponseDTO response = new MonthlyAvailableBalanceResponseDTO();
         response.setMonth(balance.getMonth());
         response.setYear(balance.getYear());

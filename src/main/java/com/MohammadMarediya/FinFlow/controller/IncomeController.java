@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +24,9 @@ public class IncomeController {
     private final IncomeService incomeService;
     private final JwtUtil jwtUtil;
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<IncomeResponseDto> getIncome(@Valid @RequestBody IncomeRequestDto incomeRequestDto) {
+    public ResponseEntity<IncomeResponseDto> addIncome(@Valid @RequestBody IncomeRequestDto incomeRequestDto) {
         log.info("Received income request: {}", incomeRequestDto);
         Long currentLoginUserId = jwtUtil.getCurrentUserId();
         IncomeResponseDto response = incomeService.addIncome(incomeRequestDto, currentLoginUserId);

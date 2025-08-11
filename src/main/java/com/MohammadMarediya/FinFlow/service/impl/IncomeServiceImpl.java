@@ -11,6 +11,7 @@ import com.MohammadMarediya.FinFlow.service.interfaces.MonthlyAvailableBalanceSe
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,7 +29,7 @@ public class IncomeServiceImpl implements IncomeService {
         log.info("Adding income for user ID: {}", userId);
         Income income = modelMapper.map(incomeRequestDto, Income.class);
         log.info("Mapped Income entity: {}", income);
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         boolean isSaved = monthlyAvailableBalanceService.addMonthlyAvailableBalance(income.getMonth(), income.getYear(), income.getAmount(), user);
         if (isSaved) {
             income.setUser(user);
@@ -39,7 +40,7 @@ public class IncomeServiceImpl implements IncomeService {
             return incomeResponseDto;
         }
         log.warn("Failed to update monthly available balance for user ID: {}", userId);
-        throw new RuntimeException("Failed to update monthly available balance for user ID: " + userId);
+        throw new IllegalArgumentException("Failed to update monthly available balance for user  " + user.getEmail());
 
     }
 }

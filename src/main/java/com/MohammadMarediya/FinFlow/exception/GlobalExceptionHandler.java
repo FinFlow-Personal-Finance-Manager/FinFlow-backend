@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -88,7 +89,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUsernameNotFoundException(UsernameNotFoundException ex, HttpServletRequest request) {
         log.warn("User not found: {}", ex.getMessage());
-        return buildErrorResponse(ErrorCodeMessage.BAD_CREDENTIALS, ErrorCodeMessage.BAD_CREDENTIALS.getMessage(), HttpStatus.NOT_FOUND, request);
+        return buildErrorResponse(ErrorCodeMessage.INVALID_USERNAME_OR_PASSWORD, ex.getMessage(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorizationDeniedException(AuthorizationDeniedException ex, HttpServletRequest request) {
+        log.warn("Authorization denied at {}: {}", request.getRequestURI(), ex.getMessage());
+        return buildErrorResponse(ErrorCodeMessage.ACCESS_DENIED, ErrorCodeMessage.ACCESS_DENIED.getMessage(), HttpStatus.FORBIDDEN, request);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
+        log.warn("Resource not found at {}: {}", request.getRequestURI(), ex.getMessage());
+        return buildErrorResponse(ErrorCodeMessage.RESOURCE_NOT_FOUND, ex.getMessage(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(Exception.class)
