@@ -90,10 +90,18 @@ class AuthServiceTest {
 
     @Test
     void registerUser_fail_emailAlreadyExists() {
+<<<<<<< HEAD
 
         when(modelMapper.map(requestDTO, User.class)).thenReturn(user);
         when(userRepository.existsByEmail(anyString())).thenReturn(true);
 
+=======
+        // Arrange
+        when(modelMapper.map(requestDTO, User.class)).thenReturn(user);
+        when(userRepository.existsByEmail(anyString())).thenReturn(true);
+
+        // Act + Assert
+>>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
         UserAlreadyExistsException exception = assertThrows(
                 UserAlreadyExistsException.class,
                 () -> authService.registerUser(requestDTO)
@@ -106,7 +114,11 @@ class AuthServiceTest {
 
     @Test
     void registerUser_success_adminRole() {
+<<<<<<< HEAD
 
+=======
+        // Arrange
+>>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
         requestDTO.setRole("ADMIN");
 
         when(modelMapper.map(requestDTO, User.class)).thenReturn(user);
@@ -119,9 +131,16 @@ class AuthServiceTest {
         AuthResponseDTO mockResponse = new AuthResponseDTO();
         when(modelMapper.map(user, AuthResponseDTO.class)).thenReturn(mockResponse);
 
+<<<<<<< HEAD
 
         AuthResponseDTO result = authService.registerUser(requestDTO);
 
+=======
+        // Act
+        AuthResponseDTO result = authService.registerUser(requestDTO);
+
+        // Assert
+>>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
         assertNotNull(result);
         assertEquals("mockToken", result.getToken());
         assertEquals(Role.ADMIN, user.getRoles());
@@ -130,16 +149,26 @@ class AuthServiceTest {
 
 
     @Test
+<<<<<<< HEAD
     void loginUser_Test() {
+=======
+    void loginUser_ShouldReturnAuthResponse_WhenCredentialsAreValid() {
+        // Arrange (set up test data)
+>>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
         LoginRequestDTO request = new LoginRequestDTO();
         request.setEmail("test@example.com");
         request.setPassword("password123");
 
+<<<<<<< HEAD
+=======
+        // Mock authentication
+>>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
         Authentication auth = mock(Authentication.class);
         when(authenticationManager.authenticate(
                 any(UsernamePasswordAuthenticationToken.class))
         ).thenReturn(auth);
 
+<<<<<<< HEAD
         User mockUser = new User();
         mockUser.setEmail("test@example.com");
         when(auth.getPrincipal()).thenReturn(mockUser);
@@ -152,12 +181,29 @@ class AuthServiceTest {
         assertNotNull(response);
         assertEquals("fake-jwt-token", response.getToken());
 
+=======
+        // Mock JWT token generation
+        when(jwtUtil.generateToken(request.getEmail(), Role.USER.name()))
+                .thenReturn("fake-jwt-token");
+
+        // Act (call the method)
+        AuthResponseDTO response = authService.loginUser(request);
+
+        // Assert (check results)
+        assertNotNull(response);
+        assertEquals("fake-jwt-token", response.getToken());
+
+
+>>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
         verify(authenticationManager, times(1))
                 .authenticate(any(UsernamePasswordAuthenticationToken.class));
         verify(jwtUtil, times(1))
                 .generateToken(request.getEmail(), Role.USER.name());
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
 }
 
 

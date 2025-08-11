@@ -42,6 +42,12 @@ public class User {
     @Column(name = "profile_img_path")
     private String profileImgPath;
 
+<<<<<<< HEAD
+=======
+    @Column(name = "availableBalance", nullable = false)
+    private BigDecimal availableBalance = BigDecimal.ZERO;
+
+>>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -52,6 +58,9 @@ public class User {
     public void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
 }
