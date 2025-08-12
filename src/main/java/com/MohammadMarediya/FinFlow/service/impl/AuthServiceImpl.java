@@ -16,10 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-<<<<<<< HEAD
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-=======
->>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -39,11 +36,8 @@ public class AuthServiceImpl implements AuthService {
         log.info("Attempting to register user with request: {}", registerRequestDTO);
 
         User user = modelMapper.map(registerRequestDTO, User.class);
-<<<<<<< HEAD
+
         log.info("Mapped User entity: {}", user);
-=======
-        log.debug("Mapped User entity: {}", user);
->>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
 
         if (userRepository.existsByEmail(user.getEmail())) {
             log.warn("Registration failed: Email '{}' already exists", user.getEmail());
@@ -69,11 +63,9 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtUtil.generateToken(savedUser.getEmail(), savedUser.getRoles().name());
         AuthResponseDTO response = modelMapper.map(savedUser, AuthResponseDTO.class);
         response.setToken(token);
-<<<<<<< HEAD
+
         log.info("User registered successfully for email: {}", savedUser.getEmail());
-=======
         log.info("User registered successfully: {}", response);
->>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
         return response;
 
     }
@@ -91,7 +83,6 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
-<<<<<<< HEAD
         User user = userRepository.findByEmail(loginRequestDTO.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + loginRequestDTO.getEmail()));
 
@@ -100,14 +91,7 @@ public class AuthServiceImpl implements AuthService {
                 loginRequestDTO.getEmail(),
                 user.getRoles().name()
         );
-=======
-        // 2. Generate JWT Token
-        String token = jwtUtil.generateToken(
-                loginRequestDTO.getEmail(),
-                Role.USER.name()
-        );
 
->>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
         log.info("Authentication successful for: {}", loginRequestDTO.getEmail());
 
         AuthResponseDTO response = new AuthResponseDTO();

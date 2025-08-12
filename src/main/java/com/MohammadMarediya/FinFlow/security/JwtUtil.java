@@ -1,7 +1,6 @@
 package com.MohammadMarediya.FinFlow.security;
 
 import com.MohammadMarediya.FinFlow.exception.TokenExpiredException;
-<<<<<<< HEAD
 import com.MohammadMarediya.FinFlow.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -12,14 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-=======
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
->>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -30,10 +21,7 @@ import java.util.Map;
 
 @Component
 @Slf4j
-<<<<<<< HEAD
 @RequiredArgsConstructor
-=======
->>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
 public class JwtUtil {
 
     @Value("${Jwt.Secret.Key}")
@@ -44,11 +32,8 @@ public class JwtUtil {
 
     private Key key;
 
-<<<<<<< HEAD
     private final UserRepository userRepository;
 
-=======
->>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
     @PostConstruct
     public void initialize() {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
@@ -110,10 +95,6 @@ public class JwtUtil {
         return user;
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
     public Date extractExpirationDate(String token) {
         Date expiration = extractClaims(token).getExpiration();
         log.info("Extracted expiration date from token");
@@ -144,7 +125,7 @@ public class JwtUtil {
         log.info("JWT token successfully verified for user: {}", Email);
         return true;
     }
-<<<<<<< HEAD
+
 
     public Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -161,6 +142,4 @@ public class JwtUtil {
         log.info("Current user ID retrieved successfully: {}", Email);
         return userId;
     }
-=======
->>>>>>> a57c5f76f3b769f078eec88ae44f1c4634f7b55f
 }
