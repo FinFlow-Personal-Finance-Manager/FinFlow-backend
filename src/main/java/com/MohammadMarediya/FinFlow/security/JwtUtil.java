@@ -108,21 +108,21 @@ public class JwtUtil {
     }
 
     public boolean verifyToken(String token, String expectedUserName) {
-        String Email = extractEmail(token);
+        String email = extractEmail(token);
         Date expiration = extractExpirationDate(token);
 
-        if (Email == null || !Email.equals(expectedUserName)) {
-            log.warn("JWT Email mismatch: expected={}, actual={}", expectedUserName, Email);
+        if (email == null || !email.equals(expectedUserName)) {
+            log.warn("JWT Email mismatch: expected={}, actual={}", expectedUserName, email);
             throw new BadCredentialsException("Username mismatch in JWT token");
         }
 
         if (expiration == null || expiration.before(new Date())) {
-            log.warn("JWT token is expired for user: {}", Email);
+            log.warn("JWT token is expired for user: {}", email);
             throw new TokenExpiredException("JWT token has expired");
         }
 
 
-        log.info("JWT token successfully verified for user: {}", Email);
+        log.info("JWT token successfully verified for user: {}", email);
         return true;
     }
 
@@ -131,15 +131,15 @@ public class JwtUtil {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("User is not authenticated");
+            throw new NullPointerException("User is not authenticated");
         }
         log.info("Retrieving current user ID from authentication context");
-        String Email = authentication.getName(); // usually username or email
+        String email = authentication.getName();
 
-        Long userId = userRepository.findByEmail(Email)
+        Long userId = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"))
                 .getId();
-        log.info("Current user ID retrieved successfully: {}", Email);
+        log.info("Current user ID retrieved successfully: {}", email);
         return userId;
     }
 }

@@ -14,6 +14,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -41,6 +44,22 @@ public class IncomeServiceImpl implements IncomeService {
         }
         log.warn("Failed to update monthly available balance for user ID: {}", userId);
         throw new IllegalArgumentException("Failed to update monthly available balance for user  " + user.getEmail());
+    }
+
+
+    @Override
+    public List<IncomeResponseDto> getIncomeById(Long incomeId, Long userId) {
+
+        log.info("Fetching income with ID: {} for user ID: {}", incomeId, userId);
+
+        List<Income> incomes = incomeRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("Income not found for user ID: " + userId));
+
+        return incomes.stream()
+                .map(user -> modelMapper.map(incomes, IncomeResponseDto.class))
+                .toList();
 
     }
+
+
 }

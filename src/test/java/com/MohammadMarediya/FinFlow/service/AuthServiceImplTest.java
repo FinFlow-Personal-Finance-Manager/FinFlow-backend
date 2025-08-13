@@ -1,4 +1,4 @@
-package com.MohammadMarediya.FinFlow;
+package com.MohammadMarediya.FinFlow.service;
 
 import com.MohammadMarediya.FinFlow.dto.auth.AuthResponseDTO;
 import com.MohammadMarediya.FinFlow.dto.auth.LoginRequestDTO;
@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-class AuthServiceTest {
+class AuthServiceImplTest {
 
     @Mock
     private UserRepository userRepository;

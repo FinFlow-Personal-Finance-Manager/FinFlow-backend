@@ -10,10 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,5 +33,19 @@ public class IncomeController {
         return ResponseEntity.ok(response);
 
     }
+
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @GetMapping("/{incomeId}")
+    public ResponseEntity<List<IncomeResponseDto>> getIncomeById(@PathVariable Long incomeId) {
+
+        log.info("Fetching income by ID");
+        Long currentLoginUserId = jwtUtil.getCurrentUserId();
+
+        List<IncomeResponseDto> response = incomeService.getIncomeById(incomeId, currentLoginUserId);
+        log.info("Income fetched successfully for user ID: {}", currentLoginUserId);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 }

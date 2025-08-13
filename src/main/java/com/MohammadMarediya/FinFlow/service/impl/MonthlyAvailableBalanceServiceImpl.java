@@ -26,11 +26,11 @@ public class MonthlyAvailableBalanceServiceImpl implements MonthlyAvailableBalan
 
         log.info("Adding monthly available balance for month: {}, year: {}, amount: {}", month, year, amount);
 
-        if (user == null || user.getId() == null) {
+        if (user == null) {
             log.warn("User cannot be null or have a null");
             return false;
         }
-        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
             log.warn("Amount cannot be negative. Provided amount: {}", amount);
             return false;
         }
